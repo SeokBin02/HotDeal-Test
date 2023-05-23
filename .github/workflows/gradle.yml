@@ -35,13 +35,12 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
+      run: ./gradlew build
 
     ## 3) Docker Hub에 이미지 push 하기
     - name: Docker build
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -t hotdeal-cicd .
-        docker tag hotdeal-cicd jyg8033/hotdeal-cicd
+        docker tag hotdeal-cicd jyg8033/hotdeal-cicd:${GITHUB_SHA::7}
+        docker push jyg8033/hotdeal-cicd:${GITHUB_SHA::7}
