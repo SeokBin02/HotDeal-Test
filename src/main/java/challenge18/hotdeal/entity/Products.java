@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class Product {
+public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -30,7 +30,4 @@ public class Product {
     @Column
     private Long amount;
 
-    public Product(){
-
-    }
 }
