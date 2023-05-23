@@ -1,5 +1,6 @@
-package challenge18.hotdeal.domain.user;
+package challenge18.hotdeal.domain.user.repository;
 
+import challenge18.hotdeal.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

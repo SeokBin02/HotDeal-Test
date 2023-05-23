@@ -1,7 +1,11 @@
-package challenge18.hotdeal.domain.user;
+package challenge18.hotdeal.domain.user.service;
 
 import challenge18.hotdeal.common.Enum.UserRole;
 import challenge18.hotdeal.common.util.Message;
+import challenge18.hotdeal.domain.user.dto.LoginRequest;
+import challenge18.hotdeal.domain.user.dto.SignupReqeust;
+import challenge18.hotdeal.domain.user.entity.User;
+import challenge18.hotdeal.domain.user.repository.UserRepository;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

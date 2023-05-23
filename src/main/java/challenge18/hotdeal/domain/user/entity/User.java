@@ -1,4 +1,4 @@
-package challenge18.hotdeal.domain.user;
+package challenge18.hotdeal.domain.user.entity;
 
 import challenge18.hotdeal.common.Enum.UserRole;
 import lombok.Getter;
