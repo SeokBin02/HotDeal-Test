@@ -18,6 +18,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
+jar {
+    enabled = false // plain.jar 생성 비활성화
+}
+
+// build시 app.jar로 생성
+bootJar{
+    archivesBaseName = 'app'
+    archiveFileName = 'app.jar'
+    archiveVersion = "0.0.0"
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
