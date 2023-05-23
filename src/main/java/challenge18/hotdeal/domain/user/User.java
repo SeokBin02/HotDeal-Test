@@ -3,7 +3,6 @@ package challenge18.hotdeal.domain.user;
 import challenge18.hotdeal.common.Enum.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
@@ -12,14 +11,14 @@ import javax.persistence.*;
 @Getter
 public class User {
     @Id
-    private Long userId;
+    private String userId;
 
     @Column(nullable = false)
-    private Long password;
+    private String password;
 
     private UserRole role;
 
-    public User(Long userId, Long password, UserRole role) {
+    public User(String userId, String password, UserRole role) {
         this.userId = userId;
         this.password = password;
         this.role = role;
