@@ -38,6 +38,7 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests()
                 .antMatchers("/users/**").permitAll()
+                .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.GET,"/products/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/limited-products").permitAll()
                 .anyRequest().authenticated()
