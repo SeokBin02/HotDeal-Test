@@ -46,7 +46,7 @@ public class UserService {
         }
 
         userRepository.save(new User(reqeust.getUserId(), reqeust.getPassword(), role));
-        return new ResponseEntity<>(new Message("회원가입 성공"), HttpStatus.OK);
+        return new ResponseEntity<>(new Message("회원가입 성공"), HttpStatus.CREATED);
     }
 
     // 로그인
