@@ -8,13 +8,13 @@ import challenge18.hotdeal.domain.limited.service.LimitedProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/limited-products")
@@ -23,6 +23,7 @@ public class LimitedProductController {
     private final LimitedProductService limitedProductService;
 
     // 한정판 상품 등록
+//    @Secured("ROLE_ADMIN")
     @PostMapping("")
     public ResponseEntity<Message> registrationLimitedProduct(@RequestBody LimitedProductRequestDto requestDto,
                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -30,7 +31,7 @@ public class LimitedProductController {
     }
 
     // 한정판 상품 목록 조회
-    @GetMapping("")
+    @GetMapping
     public List<LimitedProductResponseDto> allLimitedProduct() {
         return limitedProductService.allLimitedProduct();
     }
