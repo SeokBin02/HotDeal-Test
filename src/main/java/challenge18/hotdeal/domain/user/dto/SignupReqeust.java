@@ -1,4 +1,4 @@
-package challenge18.hotdeal.domain.user;
+package challenge18.hotdeal.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
