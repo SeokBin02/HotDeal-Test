@@ -13,29 +13,35 @@ repositories {
 }
 
 dependencies {
+    //JWT 추가하기
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter'
 }
 
-jar {
-    enabled = false // plain.jar 생성 비활성화
-}
+//jar {
+//    enabled = false // plain.jar 생성 비활성화
+//}
+//
+//// build시 app.jar로 생성
+//bootJar{
+//    archivesBaseName = 'app'
+//    archiveFileName = 'app.jar'
+//    archiveVersion = "0.0.0"
+//}
 
-// build시 app.jar로 생성
-bootJar{
-    archivesBaseName = 'app'
-    archiveFileName = 'app.jar'
-    archiveVersion = "0.0.0"
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
