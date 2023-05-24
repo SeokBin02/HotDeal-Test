@@ -17,5 +17,6 @@ public class ProductService {
     @Transactional
     public ResponseEntity<Message> selectProduct(Long id){
         productRepository.findById(id);
+        return null;
     }
 }
