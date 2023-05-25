@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity(name = "users")
+@Table(indexes = @Index(name = "idx_userId", columnList = "userId"))
 @NoArgsConstructor
 @Getter
 public class User {
