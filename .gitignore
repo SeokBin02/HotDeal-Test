@@ -39,3 +39,5 @@ out/
 ### ssh-key ###
 hotdeal-cicd
 hotdeal-cicd.pub
+
+application.yml
