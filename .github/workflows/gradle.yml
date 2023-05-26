@@ -34,7 +34,7 @@ jobs:
       run: |
         cd ./src/main/resources
         touch ./application.properties
-        echo "${{ secrets.APPLICATION.YML }}" > ./application.yml
+        echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
       shell: bash
 
     ## 2) 스프링 프로젝트 jar 파일 빌드
