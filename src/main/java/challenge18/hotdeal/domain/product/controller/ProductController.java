@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -32,13 +33,13 @@ public class ProductController {
     }
 
     // 상품 상세 조회
-    @GetMapping("/products/{productId}")
+    @GetMapping("/{productId}")
     public ProductResponseDto selectProduct(@PathVariable Long productId){
         return productService.selectProduct(productId);
     }
 
     // 상품 구매
-    @PostMapping("/products/{productId}")
+    @PostMapping("/{productId}")
     public ResponseEntity<Message> buyLimitedProduct(@PathVariable Long productId,
                                                      @RequestBody Map<String, Integer> map,
                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
