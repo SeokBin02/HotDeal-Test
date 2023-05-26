@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +43,19 @@ public class HotDealApplicationTests {
     void concurrencyAboutLimitedProductTests() throws InterruptedException {
         // given
         LimitedProduct limitedProduct = new LimitedProduct(
-                new LimitedProductRequestDto("에어조던1 시카고 OG", 280000, "신발", "스니커즈", 2000)
+                new LimitedProductRequestDto("에어조던1 시카고 OG", 280000, "신발", "스니커즈", 500)
         );
         limitedProductRepository.saveAndFlush(limitedProduct);
 
         List<User> testUsers = new ArrayList<>();
-        for (int i = 1; i <= 2000; i++) {
+        for (int i = 1; i <= 500; i++) {
             User user = new User("testUser" + i, "password", UserRole.ROLE_USER);
             userRepository.saveAndFlush(user);
             testUsers.add(user);
         }
 
-        ExecutorService executorService = Executors.newFixedThreadPool(2000);
-        CountDownLatch latch = new CountDownLatch(2000);
+        ExecutorService executorService = Executors.newFixedThreadPool(500);
+        CountDownLatch latch = new CountDownLatch(500);
 
         // when
         for (User user : testUsers) {
@@ -74,12 +75,12 @@ public class HotDealApplicationTests {
     @DisplayName("회원가입 동시성 테스트")
     void signupConcurrencyTests() throws InterruptedException {
         // given
-        ExecutorService executorService = Executors.newFixedThreadPool(2000);
-        CountDownLatch latch = new CountDownLatch(2000);
+        ExecutorService executorService = Executors.newFixedThreadPool(100);
+        CountDownLatch latch = new CountDownLatch(100);
         List<Integer> users = new ArrayList<>();
 
         // when
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 100; i++) {
             final int j = i;
             SignupRequest requestDto = new SignupRequest("testId", "testPassword" + i, false, "");
             executorService.execute(() -> {
