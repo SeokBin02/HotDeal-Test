@@ -14,18 +14,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LimitedProductService {
 
     private final LimitedProductRepository limitedProductRepository;
     private final PurchaseRepository purchaseRepository;
 
     // 한정판 상품 등록
+    @Transactional(readOnly = false)
     public ResponseEntity<Message> registrationLimitedProduct(LimitedProductRequestDto requestDto, User user) {
         if (user.getRole() == UserRole.ROLE_USER) {
             return new ResponseEntity<>(new Message("관리자가 아닙니다."), HttpStatus.BAD_REQUEST);
@@ -50,6 +53,7 @@ public class LimitedProductService {
     }
 
     // 한정판 상품 구매
+    @Transactional(readOnly = false)
     public ResponseEntity<Message> buyLimitedProduct(Long limitedProductId, User user) {
         if (user == null) {
             return new ResponseEntity<>(new Message("로그인이 필요합니다."), HttpStatus.BAD_REQUEST);

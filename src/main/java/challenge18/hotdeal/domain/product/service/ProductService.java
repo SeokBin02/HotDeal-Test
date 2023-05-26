@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -51,7 +52,6 @@ public class ProductService {
     }
 
     //상품 상세 조회
-    @Transactional
     public ProductResponseDto selectProduct(Long productId){
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
@@ -59,6 +59,7 @@ public class ProductService {
     }
 
     // 상품 구매
+    @Transactional(readOnly = false)
     public ResponseEntity<Message> buyProduct(Long productId, int quantity, User user) {
         if (user == null) {
             return new ResponseEntity<>(new Message("로그인이 필요합니다."), HttpStatus.BAD_REQUEST);

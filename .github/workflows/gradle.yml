@@ -30,10 +30,10 @@ jobs:
         distribution: 'temurin'
 
     ## 1) git ignore에 등록된 application.yml 파일 생성해주기
-    - name: make application.properties
+    - name: make application.yml
       run: |
         cd ./src/main/resources
-        touch ./application.properties
+        touch ./application.yml
         echo "${{ secrets.APPLICATION_YML }}" > ./application.yml
       shell: bash
 
