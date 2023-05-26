@@ -1,6 +1,7 @@
 package challenge18.hotdeal.domain.product.service;
 
 import challenge18.hotdeal.common.util.Message;
+import challenge18.hotdeal.domain.product.dto.ConditionDto;
 import challenge18.hotdeal.domain.product.dto.ProductResponseDto;
 import challenge18.hotdeal.domain.product.entity.Product;
 import challenge18.hotdeal.domain.product.repository.ProductRepository;
@@ -13,12 +14,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final PurchaseRepository purchaseRepository;
+
+    // 상품 전체 조회 (필터링)
+    public List<ProductResponseDto> allProduct(ConditionDto condition) throws IllegalAccessException {
+
+        boolean allNull = true;
+
+        // condition의 모들 필드 값을 체크하여 전부 null일 경우 allNull = true
+        for (Field f : condition.getClass().getFields()) {
+            if (f.get(condition) != null) {
+                allNull = false; break;
+            }
+        }
+
+        // 아무 조건도 제공되지 않을 경우, Top 90 계산하여 제공한다.
+        if (allNull) {
+            System.out.println("조건 없음");
+            return null;
+        }
+
+        // 동적 쿼리
+        return productRepository.findAllByPriceAndCategory(condition)
+                .stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
+    }
 
     //상품 상세 조회
     @Transactional
@@ -28,6 +58,7 @@ public class ProductService {
         return new ProductResponseDto(product);
     }
 
+    // 상품 구매
     public ResponseEntity<Message> buyProduct(Long productId, int quantity, User user) {
         if (user == null) {
             return new ResponseEntity<>(new Message("로그인이 필요합니다."), HttpStatus.BAD_REQUEST);
@@ -46,4 +77,6 @@ public class ProductService {
         purchaseRepository.save(new Purchase(quantity, user, product, null));
         return new ResponseEntity<>(new Message("상품 구매 성공"), HttpStatus.OK);
     }
+
+
 }
