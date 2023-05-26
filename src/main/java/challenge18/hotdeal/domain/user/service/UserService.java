@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Service
@@ -30,12 +33,6 @@ public class UserService {
     public ResponseEntity<Message> signup(SignupRequest request) {
         UserRole role = UserRole.ROLE_USER;
 
-        // 중복 회원 체크
-        Optional<User> user = userRepository.findById(request.getUserId());
-        if(user.isPresent()){
-            throw new DuplicateRequestException("중복된 회원이 이미 존재합니다.");
-        }
-
         // 관리자 회원가입 체크
         if(request.isAdmin()){
             if(!request.getAdminToken().equals(ADMINTOKEN)){
@@ -44,7 +41,12 @@ public class UserService {
             role = UserRole.ROLE_ADMIN;
         }
 
-        userRepository.insert(request.getUserId(), request.getPassword(), role.toString());
+        try {
+            userRepository.insert(request.getUserId(), request.getPassword(), role.toString());
+        } catch (Exception e) {
+            throw new DuplicateRequestException("중복된 회원이 이미 존재합니다.");
+        }
+
         return new ResponseEntity<>(new Message("회원가입 성공"), HttpStatus.CREATED);
     }
 
