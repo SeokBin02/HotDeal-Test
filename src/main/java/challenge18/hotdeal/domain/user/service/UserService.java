@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -25,11 +26,12 @@ public class UserService {
 
 
     // 회원가입
+    @Transactional
     public ResponseEntity<Message> signup(SignupRequest request) {
         UserRole role = UserRole.ROLE_USER;
 
         // 중복 회원 체크
-        Optional<User> user = checkUserExist(request.getUserId());
+        Optional<User> user = userRepository.findById(request.getUserId());
         if(user.isPresent()){
             throw new DuplicateRequestException("중복된 회원이 이미 존재합니다.");
         }
@@ -42,7 +44,7 @@ public class UserService {
             role = UserRole.ROLE_ADMIN;
         }
 
-        userRepository.save(new User(request.getUserId(), request.getPassword(), role));
+        userRepository.insert(request.getUserId(), request.getPassword(), role.toString());
         return new ResponseEntity<>(new Message("회원가입 성공"), HttpStatus.CREATED);
     }
 
