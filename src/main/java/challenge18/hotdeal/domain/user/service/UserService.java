@@ -21,6 +21,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -50,7 +51,6 @@ public class UserService {
     }
 
     // 로그인
-    @Transactional(readOnly = true)
     public ResponseEntity<Message> login(LoginRequest request, HttpServletResponse response) {
         log.info("service");
         // 회원정보 존재 유무 체크
