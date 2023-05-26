@@ -2,7 +2,6 @@ package challenge18.hotdeal.domain.product.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -10,7 +9,6 @@ import javax.persistence.*;
 @Table(name="products")
 @Getter
 @NoArgsConstructor
-@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +29,6 @@ public class Product {
 
     @Column
     private int amount;
-
-    public Product(String productName, int price, String categoryA, String categoryB, int amount) {
-        this.productName = productName;
-        this.price = price;
-        this.categoryA = categoryA;
-        this.categoryB = categoryB;
-        this.amount = amount;
-    }
 
     public void buy(int quantity) {
         this.amount -= quantity;
