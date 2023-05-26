@@ -9,6 +9,7 @@ import challenge18.hotdeal.domain.user.entity.User;
 import challenge18.hotdeal.domain.user.repository.UserRepository;
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,9 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -52,6 +55,7 @@ public class UserService {
 
     // 로그인
     public ResponseEntity<Message> login(LoginRequest request, HttpServletResponse response) {
+        log.info("service");
         // 회원정보 존재 유무 체크
         Optional<User> user = checkUserExist(request.getUserId());
         if(!user.isPresent()){
@@ -66,6 +70,7 @@ public class UserService {
     }
 
     private Optional<User> checkUserExist(String userId){
+        log.info("db접근");
         return userRepository.findByUserId(userId);
     }
 }
