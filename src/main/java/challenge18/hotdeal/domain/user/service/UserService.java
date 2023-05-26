@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -47,6 +48,7 @@ public class UserService {
     }
 
     // 로그인
+    @Transactional(readOnly = true)
     public ResponseEntity<Message> login(LoginRequest request, HttpServletResponse response) {
         // 회원정보 존재 유무 체크
         Optional<User> user = checkUserExist(request.getUserId());

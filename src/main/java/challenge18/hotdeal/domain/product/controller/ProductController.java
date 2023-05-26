@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -25,7 +27,7 @@ public class ProductController {
     // 상품 구매
     @PostMapping("/{productId}")
     public ResponseEntity<Message> buyLimitedProduct(@PathVariable Long productId,
-                                                     @RequestBody int quantity,
+                                                     @RequestParam int quantity,
                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return productService.buyProduct(productId, quantity, userDetails.getUser());
     }
