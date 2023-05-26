@@ -26,12 +26,12 @@ public class UserService {
 
 
     // 회원가입
+    @Transactional
     public ResponseEntity<Message> signup(SignupRequest request) {
         UserRole role = UserRole.ROLE_USER;
 
         // 중복 회원 체크
-        Optional<User> user = checkUserExist(request.getUserId());
-        if(user.isPresent()){
+        if (userRepository.findByUserId(request.getUserId()).isPresent()) {
             throw new DuplicateRequestException("중복된 회원이 이미 존재합니다.");
         }
 
@@ -48,7 +48,11 @@ public class UserService {
     }
 
     // 로그인
+<<<<<<< HEAD
     @Transactional(readOnly = true)
+=======
+    @Transactional
+>>>>>>> c7880106f5638e8300ec5508183d400fd2d3282d
     public ResponseEntity<Message> login(LoginRequest request, HttpServletResponse response) {
         // 회원정보 존재 유무 체크
         Optional<User> user = checkUserExist(request.getUserId());
