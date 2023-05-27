@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    master:
+      hikari:
+        driver-class-name: org.h2.Driver
+        jdbc-url: jdbc:h2:mem:db;MODE=MYSQL;
+        username: sa
+        password:
+    slave:
+      hikari:
+        driver-class-name: org.h2.Driver
+        jdbc-url: jdbc:h2:mem:db;MODE=MYSQL;
+        username: sa
+        password:
