@@ -28,6 +28,9 @@ public class Product {
     private String categoryB;
 
     @Column
+    private int priceCategory;
+
+    @Column
     private int amount;
 
     public void buy(int quantity) {

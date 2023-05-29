@@ -1,10 +1,14 @@
 package challenge18.hotdeal.domain.product.repository;
 
-import challenge18.hotdeal.domain.product.dto.ConditionDto;
-import challenge18.hotdeal.domain.product.entity.Product;
+import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
+import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
 public interface ProductRepositoryCustom {
-    List<Product> findAllByPriceAndCategory(ConditionDto condition);
+    //Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable);
+    List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition);
 }
