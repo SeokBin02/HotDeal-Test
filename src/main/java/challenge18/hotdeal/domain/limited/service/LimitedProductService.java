@@ -10,7 +10,6 @@ import challenge18.hotdeal.domain.purchase.entity.Purchase;
 import challenge18.hotdeal.domain.purchase.repository.PurchaseRepository;
 import challenge18.hotdeal.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,8 +58,9 @@ public class LimitedProductService {
             return new ResponseEntity<>(new Message("로그인이 필요합니다."), HttpStatus.BAD_REQUEST);
         }
 
-        LimitedProduct limitedProduct = limitedProductRepository.findById(limitedProductId)
+        LimitedProduct limitedProduct = limitedProductRepository.findWithId(limitedProductId)
                 .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+
 
         if (limitedProduct.getAmount() <= 0) {
             throw new IllegalArgumentException("상품 재고가 없습니다.");
