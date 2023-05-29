@@ -9,10 +9,14 @@ import challenge18.hotdeal.domain.purchase.entity.Purchase;
 import challenge18.hotdeal.domain.purchase.repository.PurchaseRepository;
 import challenge18.hotdeal.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -40,8 +44,12 @@ public class ProductService {
 
         // 아무 조건도 제공되지 않을 경우, Top 90 계산하여 제공한다.
         if (allNull) {
-            System.out.println("조건 없음");
-            return null;
+            return productRepository.findPorpularTop90()
+                    .stream()
+                    .map(ProductResponseDto::new)
+                    .collect(Collectors.toList());
+//            System.out.println("조건 없음");
+//            return null;
         }
 
         // 동적 쿼리
@@ -78,6 +86,4 @@ public class ProductService {
         purchaseRepository.save(new Purchase(quantity, user, product, null));
         return new ResponseEntity<>(new Message("상품 구매 성공"), HttpStatus.OK);
     }
-
-
 }

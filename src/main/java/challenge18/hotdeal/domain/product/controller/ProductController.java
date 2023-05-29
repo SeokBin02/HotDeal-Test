@@ -6,13 +6,12 @@ import challenge18.hotdeal.domain.product.dto.ConditionDto;
 import challenge18.hotdeal.domain.product.dto.ProductResponseDto;
 import challenge18.hotdeal.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +23,10 @@ public class ProductController {
     // 상품 목록 조회
     @GetMapping("/products")
     public List<ProductResponseDto> allProduct(ConditionDto condition) throws IllegalAccessException {
-        System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
-        System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
-        System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
-        System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
+//        System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
+//        System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
+//        System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
+//        System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
         //ConditionDto condition = new ConditionDto(minPrice, maxPrice, mainCategory, subCategory);
         return productService.allProduct(condition);
     }

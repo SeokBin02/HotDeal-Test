@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static challenge18.hotdeal.domain.product.entity.QProduct.product;
+import static challenge18.hotdeal.domain.purchase.entity.QPurchase.purchase;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,6 +34,41 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 )
                 .fetch();
     }
+//    product.id, product.id.count().as("sold_cnt")
+    @Override
+    public List<Product> findPorpularTop90() {
+        List<Long> popularProductIds = queryFactory
+                .select(product.id)
+                .from(product)
+                .leftJoin(purchase)
+                .on(product.id.eq(purchase.product.id))
+                .groupBy(product.id)
+                .orderBy(product.id.count().desc())
+                .limit(90)
+                .fetch();
+
+        return queryFactory
+                .selectFrom(product)
+                .where(product.id.in(popularProductIds))
+                .fetch();
+//        return queryFactory
+//                .select(product.id)
+//                .from(product)
+//                .leftJoin(purchase)
+//                .on(product.id.eq(purchase.product.id))
+//                .groupBy(product.id)
+//                .orderBy(product.id.count().desc())
+//                .limit(90)
+//                .fetch();
+//        return null;
+    }
+
+    @Override
+    public List<Product> findByKeyword(String keyword) {
+        return queryFactory.select(product).from(product)
+                .where(product.productName.like(keyword)).fetch();
+    }
+
 
     // 대분류 검색
     private BooleanExpression eqMainCategory(String searchMainCategory) {
