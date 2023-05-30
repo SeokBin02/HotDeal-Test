@@ -4,6 +4,9 @@ import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,8 +21,9 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<AllProductResponseDto> findTop90() {
-        List<AllProductResponseDto> result = queryFactory
+    public Page<AllProductResponseDto> findTop90(Pageable pageable) {
+        System.out.println("pageable.getOffset() = " + pageable.getOffset());
+        List<AllProductResponseDto> content = queryFactory
                 .select(Projections.constructor(AllProductResponseDto.class,
                         product.productName,
                         product.price))
@@ -28,10 +32,11 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
                 .where(purchase.product.isNotNull())
                 .groupBy(purchase.product)
                 .orderBy(purchase.amount.sum().desc())
+                .offset(pageable.getOffset()) // 페이지 번호
                 .limit(90)
                 .fetch();
 
-        return result;
+        return new PageImpl<>(content, pageable, 90);
     }
 
 }

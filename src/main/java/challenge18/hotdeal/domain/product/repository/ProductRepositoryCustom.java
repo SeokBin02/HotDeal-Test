@@ -9,6 +9,6 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 
 public interface ProductRepositoryCustom {
-    //Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable);
-    List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition);
+    Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable);
+//    List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition);
 }
