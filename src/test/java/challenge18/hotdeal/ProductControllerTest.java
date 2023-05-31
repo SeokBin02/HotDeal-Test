@@ -10,23 +10,21 @@ import challenge18.hotdeal.domain.purchase.repository.PurchaseRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.config.location = classpath:application-test.yml")
 public class ProductControllerTest {
-    Logger log = (Logger) LoggerFactory.getLogger(ProductControllerTest.class);
+    Logger log = LoggerFactory.getLogger(ProductControllerTest.class);
     @Autowired
     ProductService productService;
     @Autowired
@@ -37,26 +35,26 @@ public class ProductControllerTest {
     // http://localhost:8080/products
     @Test
     @DisplayName("Product 데이터 가져오기 테스트")
-    void allProduct() throws Exception{
+    void allProduct(){
 //        product_id, amount, categorya, categoryb, price, price_category, product_name
         // given
         Random rand = new Random(System.currentTimeMillis());
 
         String productName = "하우스 메이드 포켓 반팔티 블랙";
-        String name_index = "";
+        String name_index;
         final String categoryA = "상의";
         final String categoryB = "반소매 티셔츠";
-        int amount = 0;
-        int price = 0;
+        int amount;
+        int price;
 
         for(int i=1; i<=1000; i++){
             name_index = Integer.toString(i);
-            price = (int)(rand.nextInt(35)+1) * 1000;
-            amount = (int)(rand.nextInt(1000)+1);
+            price = (rand.nextInt(35)+1) * 1000;
+            amount = rand.nextInt(1000)+1;
             productRepository.saveAndFlush(new Product(productName+name_index, price, categoryA, categoryB, amount));
         }
 
-        ProductSearchCondition condition = new ProductSearchCondition(1000l,35000l,"상의","반소매 티셔츠");
+        ProductSearchCondition condition = new ProductSearchCondition(1000L,35000L,"상의","반소매 티셔츠");
         Pageable pageable = PageRequest.of(1,10);
         ProductService productService = new ProductService(productRepository, purchaseRepository);
 
@@ -64,9 +62,8 @@ public class ProductControllerTest {
         Page<AllProductResponseDto> responseDtoList = productService.allProduct(condition, pageable);
 
         //then
-//        assertTrue(responseDtoList.isEmpty());
         for(AllProductResponseDto responseDto : responseDtoList){
-            log.info("가격 출력 로그 : " + Integer.toString(responseDto.getPrice()));
+            log.info("가격 출력 로그 : " + responseDto.getPrice());
             assertTrue((responseDto.getPrice()>=1000 && responseDto.getPrice()<=35000));
         }
     }
@@ -76,10 +73,9 @@ public class ProductControllerTest {
     class SearchProductsTest{
         @Test
         @DisplayName("condition이 null일 경우")
-        void nullCondition() throws Exception{
+        void nullCondition(){
             //given
             ProductSearchCondition condition = new ProductSearchCondition(null, null, "",  "");
-            Pageable pageable = PageRequest.of(1,10);
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when,then
@@ -88,10 +84,9 @@ public class ProductControllerTest {
 
         @Test
         @DisplayName("condition이 null이 아닐 경우")
-        void notNullCondition() throws Exception{
+        void notNullCondition(){
             //given
             ProductSearchCondition condition = new ProductSearchCondition(null, null, "신발",  "로퍼");
-            Pageable pageable = PageRequest.of(1,10);
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when,then
@@ -100,10 +95,9 @@ public class ProductControllerTest {
 
         @Test
         @DisplayName("category가 null값이 입력된 경우")
-        void inputCategoryIsNull() throws Exception{
+        void inputCategoryIsNull(){
             //given
             ProductSearchCondition condition = new ProductSearchCondition(null, null, null,  null);
-            Pageable pageable = PageRequest.of(1,10);
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when
@@ -123,8 +117,7 @@ public class ProductControllerTest {
         @DisplayName("min > max")
         void vaildateInput1(){
             //given
-            ProductSearchCondition condition = new ProductSearchCondition(100000l, 20000l, "신발","로퍼");
-            Pageable pageable = PageRequest.of(1,10);
+            ProductSearchCondition condition = new ProductSearchCondition(100000L, 20000L, "신발","로퍼");
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when
@@ -139,8 +132,7 @@ public class ProductControllerTest {
         @DisplayName("min < 0")
         void vaildateInput2(){
             //given
-            ProductSearchCondition condition = new ProductSearchCondition(-1l, 20000l, "신발","로퍼");
-            Pageable pageable = PageRequest.of(1,10);
+            ProductSearchCondition condition = new ProductSearchCondition(-1L, 20000L, "신발","로퍼");
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when
@@ -155,8 +147,7 @@ public class ProductControllerTest {
         @DisplayName("max < 0")
         void vaildateInput3(){
             //given
-            ProductSearchCondition condition = new ProductSearchCondition(10000l, -1l, "신발","로퍼");
-            Pageable pageable = PageRequest.of(1,10);
+            ProductSearchCondition condition = new ProductSearchCondition(10000L, -1L, "신발","로퍼");
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when
@@ -171,8 +162,7 @@ public class ProductControllerTest {
         @DisplayName("min > 10억")
         void vaildateInput4(){
             //given
-            ProductSearchCondition condition = new ProductSearchCondition(1000000000000l, 0l, "신발","로퍼");
-            Pageable pageable = PageRequest.of(1,10);
+            ProductSearchCondition condition = new ProductSearchCondition(1000000000000L, 0L, "신발","로퍼");
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when
@@ -187,8 +177,7 @@ public class ProductControllerTest {
         @DisplayName("max > 10억")
         void vaildateInput5(){
             //given
-            ProductSearchCondition condition = new ProductSearchCondition(10000l, 1000000000000l, "신발","로퍼");
-            Pageable pageable = PageRequest.of(1,10);
+            ProductSearchCondition condition = new ProductSearchCondition(10000L, 1000000000000L, "신발","로퍼");
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
             //when
@@ -199,5 +188,4 @@ public class ProductControllerTest {
             assertEquals(10000, afterCheckCondition.getMinPrice());
         }
     }
-
 }
