@@ -106,9 +106,12 @@ public class ProductControllerTest {
             Pageable pageable = PageRequest.of(1,10);
             ProductService productService = new ProductService(productRepository, purchaseRepository);
 
-            //when,then
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> productService.checkConditionNull(condition));
-            assertEquals("Category is null", exception.getMessage());
+            //when
+            productService.checkConditionNull(condition);
+
+            //then
+            assertEquals("", condition.getMainCategory());
+            assertEquals("", condition.getSubCategory());
         }
     }
 

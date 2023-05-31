@@ -78,7 +78,8 @@ public class ProductService {
 
     public boolean checkConditionNull(ProductSearchCondition condition){
         if (condition.getMainCategory() == null || condition.getSubCategory() == null){
-            throw new IllegalArgumentException("Category is null");
+            condition.setMainCategory("");
+            condition.setSubCategory("");
         }
 
         if (condition.getMaxPrice() == null && condition.getMaxPrice() == null &&
