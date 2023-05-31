@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,12 +61,14 @@ public class ProductControllerTest {
         ProductService productService = new ProductService(productRepository, purchaseRepository);
 
         //when
-        List<AllProductResponseDto> responseDtoList = productService.allProduct(condition, pageable);
+        Page<AllProductResponseDto> responseDtoList = productService.allProduct(condition, pageable);
 
         //then
 //        assertTrue(responseDtoList.isEmpty());
-        log.info("가격 출력 로그 : " + Integer.toString(responseDtoList.get(0).getPrice()));
-        assertNotEquals(50000, responseDtoList.get(0).getPrice());
+        for(AllProductResponseDto responseDto : responseDtoList){
+            log.info("가격 출력 로그 : " + Integer.toString(responseDto.getPrice()));
+            assertTrue((responseDto.getPrice()>=1000 && responseDto.getPrice()<=35000));
+        }
     }
 
     @Nested
