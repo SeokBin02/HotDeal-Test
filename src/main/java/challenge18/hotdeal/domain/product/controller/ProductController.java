@@ -2,8 +2,8 @@ package challenge18.hotdeal.domain.product.controller;
 
 import challenge18.hotdeal.common.security.UserDetailsImpl;
 import challenge18.hotdeal.common.util.Message;
-import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
 import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
+import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
 import challenge18.hotdeal.domain.product.dto.SelectProductResponseDto;
 import challenge18.hotdeal.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +26,16 @@ public class ProductController {
 
     // 상품 목록 조회
     @GetMapping("")
+
     public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
-//                                                  , @PageableDefault(page = 1, size = 15) Pageable pageable
-    ) throws IllegalAccessException {
-//        System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
-//        System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
-//        System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
-//        System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
-//        return productService.allProduct(condition, pageable);
-        return productService.allProduct(condition);
+                                                  ,@PageableDefault Pageable pageable
+    ) {
+        System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
+        System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
+        System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
+        System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
+        return productService.allProduct(condition, pageable);
+//        return productService.allProduct(condition);
     }
 
     // 상품 상세 조회

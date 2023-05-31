@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface PurchaseRespositoryCustom {
 //    Page<AllProductResponseDto> findTop90(Pageable pageable);
-    List<AllProductResponseDto> findTop90();
+    List<AllProductResponseDto> findTop90(Pageable pageable);
+//    List<AllProductResponseDto> findTop90();
 }

@@ -12,5 +12,6 @@ import java.util.List;
 public interface ProductRepositoryCustom {
 
 //    Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable);
-    List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition);
+//    List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition);
+    List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable);
 }
