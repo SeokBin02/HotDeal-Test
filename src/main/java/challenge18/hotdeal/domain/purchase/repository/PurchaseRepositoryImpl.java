@@ -21,8 +21,13 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AllProductResponseDto> findTop90(Pageable pageable) {
-        System.out.println("pageable.getOffset() = " + pageable.getOffset());
+
+    public List<AllProductResponseDto> findTop90(
+            Pageable pageable
+    ) {
+        System.out.println("pageable.getOffset() = "
+                + pageable.getOffset()
+        );
         List<AllProductResponseDto> content = queryFactory
                 .select(Projections.constructor(AllProductResponseDto.class,
                         product.productName,
@@ -32,11 +37,16 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
                 .where(purchase.product.isNotNull())
                 .groupBy(purchase.product)
                 .orderBy(purchase.amount.sum().desc())
-                .offset(pageable.getOffset()) // 페이지 번호
+                .offset(
+                        pageable.getOffset()
+                ) // 페이지 번호
                 .limit(90)
                 .fetch();
 
-        return new PageImpl<>(content, pageable, 90);
+
+//        return new PageImpl<>(content, pageable, 90);
+        return content;
     }
+
 
 }

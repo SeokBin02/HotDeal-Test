@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,12 +26,16 @@ public class ProductController {
 
     // 상품 목록 조회
     @GetMapping("")
-    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition, @PageableDefault Pageable pageable) {
+
+    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
+                                                  ,@PageableDefault Pageable pageable
+    ) {
         System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
         System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
         System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
         System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
         return productService.allProduct(condition, pageable);
+//        return productService.allProduct(condition);
     }
 
     // 상품 상세 조회
