@@ -1,8 +1,8 @@
 package challenge18.hotdeal.domain.product.service;
 
 import challenge18.hotdeal.common.util.Message;
-import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
 import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
+import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
 import challenge18.hotdeal.domain.product.dto.SelectProductResponseDto;
 import challenge18.hotdeal.domain.product.entity.Product;
 import challenge18.hotdeal.domain.product.repository.ProductRepository;
@@ -17,9 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,18 +26,17 @@ public class ProductService {
     private final PurchaseRepository purchaseRepository;
 
     // 상품 전체 조회 (필터링)
-    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
-            //, Pageable pageable
-    ) throws IllegalAccessException {
+    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition, Pageable pageable) {
 
+        // 조건이 없을 경우 전날 판매 실적 기준 Top90위
         if (condition.getMaxPrice() == null && condition.getMaxPrice() == null &&
-                condition.getMainCategory().equals("") && condition.getSubCategory().equals("")) {
-            return purchaseRepository.findTop90();
+                (condition.getMainCategory().equals("") || condition.getMainCategory() == null) &&
+                (condition.getSubCategory().equals("") || condition.getSubCategory() == null)) {
+            return purchaseRepository.findTop90(pageable);
         }
 
-        // 동적 쿼리
-        //return productRepository.findAllByPriceAndCategory(condition, pageable);
-        return productRepository.findAllByPriceAndCategory(condition);
+        // 조건 필터링
+        return productRepository.findAllByPriceAndCategory(condition, pageable);
     }
 
     //상품 상세 조회

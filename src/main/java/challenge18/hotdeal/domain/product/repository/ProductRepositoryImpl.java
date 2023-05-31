@@ -6,6 +6,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.net.URLDecoder;
@@ -20,9 +23,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition
-                                                                 //, Pageable pageable
-    ) {
+    public Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable) {
         // mainCategory = "상의"
         // subCategory = "반소매 티셔츠"
         // minPrice = "1000"
@@ -39,24 +40,23 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         eqMainCategory(URLDecoder.decode(condition.getMainCategory())),
                         eqSubCategory(URLDecoder.decode(condition.getSubCategory()))
                 )
-                //.offset(pageable.getOffset()) // 페이지 번호
-                //.limit(pageable.getPageSize()) // 페이지 사이즈
+                .offset(pageable.getOffset()) // 페이지 번호
+                .limit(pageable.getPageSize()) // 페이지 사이즈
                 .fetch();
 
-//        Long count = queryFactory
-//                .select(product.id.count())
-//                .from(product)
-//                .where(
-//                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
-//                        goeMinPrice(condition.getMinPrice()),
-//                        loeMaxPrice(condition.getMaxPrice()),
-//                        eqMainCategory(condition.getMainCategory()),
-//                        eqSubCategory(condition.getSubCategory())
-//                )
-//                .fetchOne();
+        Long total = queryFactory
+                .select(product.id.count())
+                .from(product)
+                .where(
+                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
+                        goeMinPrice(condition.getMinPrice()),
+                        loeMaxPrice(condition.getMaxPrice()),
+                        eqMainCategory(condition.getMainCategory()),
+                        eqSubCategory(condition.getSubCategory())
+                )
+                .fetchOne();
 
-        // return new PageImpl<>(content, pageable, 90);
-        return content;
+         return new PageImpl<>(content, pageable, total);
     }
 
     // 대분류 검색
