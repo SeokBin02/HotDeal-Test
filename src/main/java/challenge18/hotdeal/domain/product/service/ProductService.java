@@ -16,6 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,17 +30,22 @@ public class ProductService {
     private final PurchaseRepository purchaseRepository;
 
     // 상품 전체 조회 (필터링)
-    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition, Pageable pageable) {
+
+    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
+                                                  ,Pageable pageable
+    ) {
 
         // 조건이 없을 경우 전날 판매 실적 기준 Top90위
         if (condition.getMaxPrice() == null && condition.getMaxPrice() == null &&
                 (condition.getMainCategory().equals("") || condition.getMainCategory() == null) &&
                 (condition.getSubCategory().equals("") || condition.getSubCategory() == null)) {
             return purchaseRepository.findTop90(pageable);
+//            return purchaseRepository.findTop90();
         }
 
         // 조건 필터링
         return productRepository.findAllByPriceAndCategory(condition, pageable);
+//        return productRepository.findAllByPriceAndCategory(condition);
     }
 
     //상품 상세 조회
@@ -66,6 +75,4 @@ public class ProductService {
         purchaseRepository.save(new Purchase(quantity, user, product, null));
         return new ResponseEntity<>(new Message("상품 구매 성공"), HttpStatus.OK);
     }
-
-
 }

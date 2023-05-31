@@ -2,6 +2,7 @@ package challenge18.hotdeal.domain.product.repository;
 
 import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
 import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
+import challenge18.hotdeal.domain.product.entity.Product;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,11 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import static challenge18.hotdeal.domain.product.entity.QProduct.product;
+import static challenge18.hotdeal.domain.purchase.entity.QPurchase.purchase;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,15 +27,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable) {
-        // mainCategory = "상의"
-        // subCategory = "반소매 티셔츠"
-        // minPrice = "1000"
-        // maxPrice = "1351000" (131만 1천원)
-        List<AllProductResponseDto> content = queryFactory
-                .select(Projections.constructor(AllProductResponseDto.class,
-                        product.productName,
-                        product.price))
+
+    public List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition
+            , Pageable pageable
+    ) {
+        //석빈 쿼리 튜닝
+        List<Long> content_id = queryFactory
+                .select(product.id)
                 .from(product)
                 .where(
                         searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
@@ -40,24 +42,62 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         eqMainCategory(URLDecoder.decode(condition.getMainCategory())),
                         eqSubCategory(URLDecoder.decode(condition.getSubCategory()))
                 )
-                .offset(pageable.getOffset()) // 페이지 번호
-                .limit(pageable.getPageSize()) // 페이지 사이즈
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
 
-        Long total = queryFactory
-                .select(product.id.count())
-                .from(product)
-                .where(
-                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
-                        goeMinPrice(condition.getMinPrice()),
-                        loeMaxPrice(condition.getMaxPrice()),
-                        eqMainCategory(condition.getMainCategory()),
-                        eqSubCategory(condition.getSubCategory())
-                )
-                .fetchOne();
+        if(CollectionUtils.isEmpty(content_id)){
+            return new ArrayList<AllProductResponseDto>();
+        }
 
-         return new PageImpl<>(content, pageable, total);
+        return queryFactory
+                .select(Projections.constructor(AllProductResponseDto.class,
+                        product.productName,
+                        product.price))
+                .from(product)
+                .where(product.id.in(content_id))
+                .orderBy(product.id.desc())
+                .fetch();
+
+        // mainCategory = "상의"
+        // subCategory = "반소매 티셔츠"
+        // minPrice = "1000"
+        // maxPrice = "1351000" (131만 1천원)
+//        List<AllProductResponseDto> content = queryFactory
+//                .select(Projections.constructor(AllProductResponseDto.class,
+//                        product.productName,
+//                        product.price))
+//                .from(product)
+//                .where(
+//                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
+//                        goeMinPrice(condition.getMinPrice()),
+//                        loeMaxPrice(condition.getMaxPrice()),
+//                        eqMainCategory(URLDecoder.decode(condition.getMainCategory())),
+//                        eqSubCategory(URLDecoder.decode(condition.getSubCategory()))
+//                )
+//
+//                .offset(pageable.getOffset()) // 페이지 번호
+//                .limit(pageable.getPageSize()) // 페이지 사이즈
+//                .fetch();
+
+//        Long total = queryFactory
+//                .select(product.id.count())
+//                .from(product)
+//                .where(
+//                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
+//                        goeMinPrice(condition.getMinPrice()),
+//                        loeMaxPrice(condition.getMaxPrice()),
+//                        eqMainCategory(condition.getMainCategory()),
+//                        eqSubCategory(condition.getSubCategory())
+//                )
+//                .fetchOne();
+//
+//         return new PageImpl<>(content, pageable, total);
+//         return content;
     }
+//    product.id, product.id.count().as("sold_cnt")
+
+
 
     // 대분류 검색
     private BooleanExpression eqMainCategory(String searchMainCategory) {
