@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,14 +32,13 @@ public class ProductService {
 
     // 상품 전체 조회 (필터링)
 
-    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
+    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition
                                                   ,Pageable pageable
     ) {
+        condition.setCondition(validateInput(condition));
 
         // 조건이 없을 경우 전날 판매 실적 기준 Top90위
-        if (condition.getMaxPrice() == null && condition.getMaxPrice() == null &&
-                (condition.getMainCategory().equals("") || condition.getMainCategory() == null) &&
-                (condition.getSubCategory().equals("") || condition.getSubCategory() == null)) {
+        if (checkConditionNull(condition)) {
             return purchaseRepository.findTop90(pageable);
 //            return purchaseRepository.findTop90();
         }
@@ -74,5 +74,54 @@ public class ProductService {
         product.buy(quantity);
         purchaseRepository.save(new Purchase(quantity, user, product, null));
         return new ResponseEntity<>(new Message("상품 구매 성공"), HttpStatus.OK);
+    }
+
+    public boolean checkConditionNull(ProductSearchCondition condition){
+        if (condition.getMainCategory() == null || condition.getSubCategory() == null){
+            throw new IllegalArgumentException("Category is null");
+        }
+
+        if (condition.getMaxPrice() == null && condition.getMaxPrice() == null &&
+                (condition.getMainCategory().equals("") || condition.getMainCategory() == null) &&
+                (condition.getSubCategory().equals("") || condition.getSubCategory() == null)) {
+            return true;
+        }
+        return false;
+    }
+
+    // 입력된 값 유효성 검사
+    public ProductSearchCondition validateInput(ProductSearchCondition condition) {
+        ProductSearchCondition fixedCondition = new ProductSearchCondition();
+        fixedCondition.setCondition(condition);
+
+        // minPrice가 음수일때
+        if(condition.getMinPrice() != null && condition.getMinPrice() < 0){
+            fixedCondition.setMinPrice(0l);
+        }
+
+        // maxPrice가 음수일때
+        if(condition.getMaxPrice() != null && condition.getMaxPrice() < 0){
+            fixedCondition.setMaxPrice(0l);
+        }
+
+        // minPrice가 10억 이상일 때
+        if(condition.getMaxPrice() != null && condition.getMaxPrice() > 1000000000){
+            fixedCondition.setMaxPrice(999999999l);
+        }
+
+        // maxPrice가 10억 이상일 때
+        if(condition.getMinPrice() != null && condition.getMinPrice() > 1000000000){
+            fixedCondition.setMinPrice(999999999l);
+        }
+
+        // minPrice가 maxPrice보다 클 때
+        if(condition.getMinPrice() != null && condition.getMaxPrice() != null){
+            if(condition.getMinPrice() > condition.getMaxPrice()){
+                long temp = fixedCondition.getMinPrice();
+                fixedCondition.setMinPrice(fixedCondition.getMaxPrice());
+                fixedCondition.setMaxPrice(temp);
+            }
+        }
+        return fixedCondition;
     }
 }

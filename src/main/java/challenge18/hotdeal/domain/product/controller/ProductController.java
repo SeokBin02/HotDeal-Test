@@ -27,7 +27,7 @@ public class ProductController {
     // 상품 목록 조회
     @GetMapping("")
 
-    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
+    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition
                                                   ,@PageableDefault Pageable pageable
     ) {
         System.out.println("condition.getMinPrice() = " + condition.getMinPrice());

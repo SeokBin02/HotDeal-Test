@@ -19,6 +19,7 @@ import java.util.List;
 
 import static challenge18.hotdeal.domain.product.entity.QProduct.product;
 import static challenge18.hotdeal.domain.purchase.entity.QPurchase.purchase;
+import static java.lang.Long.valueOf;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,17 +29,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
 
-    public List<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition
+    public Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition
             , Pageable pageable
     ) {
+        List<AllProductResponseDto> content = new ArrayList<>();
+
         //석빈 쿼리 튜닝
         List<Long> content_id = queryFactory
                 .select(product.id)
                 .from(product)
                 .where(
                         searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
-                        goeMinPrice(condition.getMinPrice()),
-                        loeMaxPrice(condition.getMaxPrice()),
+//                        goeMinPrice(condition.getMinPrice()),
+//                        loeMaxPrice(condition.getMaxPrice()),
                         eqMainCategory(URLDecoder.decode(condition.getMainCategory())),
                         eqSubCategory(URLDecoder.decode(condition.getSubCategory()))
                 )
@@ -47,10 +50,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetch();
 
         if(CollectionUtils.isEmpty(content_id)){
-            return new ArrayList<AllProductResponseDto>();
+            return new PageImpl(content, pageable, content.size());
         }
 
-        return queryFactory
+        content =  queryFactory
                 .select(Projections.constructor(AllProductResponseDto.class,
                         product.productName,
                         product.price))
@@ -58,6 +61,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .where(product.id.in(content_id))
                 .orderBy(product.id.desc())
                 .fetch();
+
+        return new PageImpl<>(content, pageable, content.size());
 
         // mainCategory = "상의"
         // subCategory = "반소매 티셔츠"
@@ -110,14 +115,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     // 가격대 구간 검색 (priceCategory)
-    private BooleanExpression searchPriceCategory(Integer minPrice, Integer maxPrice) {
+    private BooleanExpression searchPriceCategory(Long minPrice, Long maxPrice) {
+        // 최고가, 최저가가 주어지지 않았을 때
         if (minPrice == null && maxPrice == null) {
             return null;
         }
 
         // 최고가가 주어졌는데
         if (maxPrice != null) {
-            int maxPriceCategory = maxPrice / 10000;
+            int maxPriceCategory = maxPrice.intValue() / 10000;
             // 10000원 미만일 경우
             if (maxPriceCategory == 0) {
                 // where price_category in (0)
@@ -126,7 +132,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
             // 최저가도 주어진 경우
             if (minPrice != null) {
-                int minPriceCategory = minPrice / 10000;
+                int minPriceCategory = minPrice.intValue() / 10000;
                 // 최고가와 최저가의 priceCategory가 같을 경우
                 System.out.println("minPriceCategory = " + minPriceCategory);
                 System.out.println("maxPriceCategory = " + maxPriceCategory);
@@ -148,23 +154,23 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         // 최고가가 주어지지 않은 경우, 최저가만 주어진 경우
         else {
-            int minPriceCategory = minPrice / 10000;
+            int minPriceCategory = minPrice.intValue() / 10000;
             return product.priceCategory.goe(minPriceCategory);
         }
     }
 
     //  최저가 검색
-    private BooleanExpression goeMinPrice(Integer minPrice) {
+    private BooleanExpression goeMinPrice(Long minPrice) {
         return minPrice == null ? null : product.price.goe(minPrice);
     }
 
     // 최고가 검색
-    private BooleanExpression loeMaxPrice(Integer maxPrice) {
+    private BooleanExpression loeMaxPrice(Long maxPrice) {
         return maxPrice != null ? product.price.loe(maxPrice) : null;
     }
 
     // 가격대 검색
-    private BooleanExpression betweenPrice(Integer minPrice, Integer maxPrice) {
+    private BooleanExpression betweenPrice(Long minPrice, Long maxPrice) {
         return goeMinPrice(minPrice).and(loeMaxPrice(maxPrice));
     }
 }

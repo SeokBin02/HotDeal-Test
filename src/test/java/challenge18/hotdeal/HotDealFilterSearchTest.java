@@ -46,7 +46,7 @@ public class HotDealFilterSearchTest {
     void test2(){
         List<AllProductResponseDto> productList = new ArrayList<>();
         StopWatch stopWatch = new StopWatch();
-        ProductSearchCondition condition = new ProductSearchCondition(null, 1000, "상의", "반소매 티셔츠");
+        ProductSearchCondition condition = new ProductSearchCondition(null, 1000l, "상의", "반소매 티셔츠");
         Pageable pageable = Pageable.ofSize(10);
 
 
