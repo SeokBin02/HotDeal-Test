@@ -22,7 +22,7 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
 
     @Override
 
-    public List<AllProductResponseDto> findTop90(
+    public Page<AllProductResponseDto> findTop90(
             Pageable pageable
     ) {
         System.out.println("pageable.getOffset() = "
@@ -43,9 +43,8 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
                 .limit(90)
                 .fetch();
 
-
-//        return new PageImpl<>(content, pageable, 90);
-        return content;
+        return new PageImpl<>(content, pageable, 90);
+//        return content;
     }
 
 

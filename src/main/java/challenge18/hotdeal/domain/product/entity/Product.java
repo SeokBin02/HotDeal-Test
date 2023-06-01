@@ -33,6 +33,19 @@ public class Product {
     @Column
     private int amount;
 
+    public Product(String productName, int price, String categoryA, String categoryB, int amount) {
+        this.productName = productName;
+        this.price = price;
+        this.categoryA = categoryA;
+        this.categoryB = categoryB;
+        this.amount = amount;
+        setPriceCategory(price);
+    }
+
+    private void setPriceCategory(int price){
+        this.priceCategory = price/1000;
+    }
+
     public void buy(int quantity) {
         this.amount -= quantity;
     }
