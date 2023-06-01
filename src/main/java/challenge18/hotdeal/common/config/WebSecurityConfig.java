@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                 .antMatchers(HttpMethod.GET, "/css/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/js/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/webfonts/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/images/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
