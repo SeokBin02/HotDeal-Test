@@ -12,12 +12,14 @@ public class ProductSearchCondition {
     private Long maxPrice;
     private String mainCategory;
     private String subCategory;
+    private String keyword;
 
-    public ProductSearchCondition(Long minPrice, Long maxPrice, String mainCategory, String subCategory) {
+    public ProductSearchCondition(Long minPrice, Long maxPrice, String mainCategory, String subCategory, String keyword) {
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
         this.mainCategory = mainCategory;
         this.subCategory = subCategory;
+        this.keyword = keyword;
     }
 
     public void setCondition(ProductSearchCondition condition){
@@ -25,5 +27,6 @@ public class ProductSearchCondition {
         this.maxPrice = condition.getMaxPrice();
         this.mainCategory = condition.getMainCategory();
         this.subCategory = condition.getSubCategory();
+        this.keyword = condition.getKeyword();
     }
 }

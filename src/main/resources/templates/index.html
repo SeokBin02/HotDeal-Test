@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en">
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Editorial by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<!--		<link rel="stylesheet" href="@{../assets/css/main.css}">-->
+		<link rel="stylesheet" type="text/css" href="/css/main.css">
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo"><strong>Hot Deal</strong> by Challenge Team 18</a>
+								</header>
+
+								<!-- templates : https://html5up.net/ethereal/download -->
+								<section style="padding-top: 0px; padding-bottom: 0px;">
+									<table>
+										<thead>
+											<tr>
+												<td><strong>No</strong> </td>
+												<td><strong>상품명</strong></td>
+												<td><strong>가격</strong></td>
+											</tr>
+										</thead>
+										<tbody id="product-list">
+											<tr>
+												<td>30</td>
+												<td>상품명입니다.</td>
+												<td>99999</td>
+											</tr>
+										</tbody>
+									</table>
+								</section>
+								<ul class="pagination" style="margin:0; cursor: pointer; text-align: center; padding-bottom: 20px">
+								</ul>
+						</div>
+
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Product -->
+							<section>
+								<header class="major">
+									<h2>Options</h2>
+								</header>
+								<label for="main-category">대분류</label>
+								<select onclick="set_sub_category(this.value)" id="main-category">
+									<option value="" selected>전체 선택</option>
+								</select>
+								<br>
+								<label for="sub-category">상세분류</label>
+								<select id="sub-category">
+									<option value="" selected>전체 선택</option>
+								</select>
+								<br>
+								<br>
+								<label for="minPrice">최소 가격</label>
+								<input id="minPrice" type="text"/>
+								<br>
+								<br>
+								<label for="minPrice">최대 가격</label>
+								<input id="maxPrice" type="text"/>
+								<br>
+								<br>
+								<label for="minPrice">키워드</label>
+								<input id="keyword" type="text"/>
+								<br>
+								<button onclick="getData(0)" type="button">
+									Search
+								</button>
+							</section>
+
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Git repo.</h2>
+									</header>
+									<a href="https://github.com/InyongHwang/HotDeal">https://github.com/InyongHwang/HotDeal</a>
+								</section>
+							
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>etc.</h2>
+									</header>
+								</section>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="/js/jquery.min.js"></script>
+			<script src="/js/browser.min.js"></script>
+			<script src="/js/breakpoints.min.js"></script>
+			<script src="/js/util.js"></script>
+			<script src="/js/main.js"></script>
+
+	</body>
+</html>
