@@ -1,4 +1,4 @@
-package challenge18.hotdeal;
+package challenge18.hotdeal.products;
 
 
 import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
@@ -23,8 +23,8 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.config.location = classpath:application-test.yml")
-public class ProductControllerTest {
-    Logger log = LoggerFactory.getLogger(ProductControllerTest.class);
+public class AllProductTest {
+    Logger log = LoggerFactory.getLogger(AllProductTest.class);
     @Autowired
     ProductService productService;
     @Autowired
