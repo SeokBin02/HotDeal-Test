@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    master:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://hotdeal-database.cu9sxsoss0ar.ap-northeast-2.rds.amazonaws.com:3306/hotdeal?serverTimezone=UTC&characterEncoding=UTF-8
+        username: admin
+        password: gktelf18!!
+    slave:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://hotdeal-read-database-1.cu9sxsoss0ar.ap-northeast-2.rds.amazonaws.com:3306/hotdeal?serverTimezone=UTC&characterEncoding=UTF-8
+        username: admin
+        password: gktelf18!!
+  #    hikari:
+  #      maximum-pool-size: 20
+  #      connection-timeout: 5000
+  #      connection-init-sql: SELECT 1
+  #      validation-timeout: 2000
+  #      minimum-idle: 10
+  #      idle-timeout: 600000
+  #      max-lifetime: 1800000
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari: TRACE
