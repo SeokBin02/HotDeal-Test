@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
@@ -58,58 +58,24 @@
             })();
         });
 
-        function checkVariables() {
-            let boolean = true;
-
-            let regionalMinPrice = $('#minPrice').val();
-            let regionalMaxPrice = $('#maxPrice').val();
-            let regionalMainCategory = $('#main-category').val();
-            let regionalSubCategory = $('#sub-category').val();
-
-            if (globalMinPrice != regionalMinPrice) {
-                globalMinPrice = regionalMinPrice;
-                boolean = false;
-            }
-
-            if (globalMaxPrice != regionalMaxPrice) {
-                globalMaxPrice = regionalMaxPrice;
-                boolean = false;
-            }
-
-            if (globalMainCategory != regionalMainCategory) {
-                globalMainCategory = regionalMainCategory;
-                boolean = false;
-            }
-
-            if (globalSubCategory != regionalSubCategory) {
-                globalSubCategory = regionalSubCategory;
-                boolean = false;
-            }
-
-            return boolean;
-        }
-
         function getData(startPage) {
             $.ajax({
                 url: '/products',
                 method: 'GET',
                 data: {
-                    // minPrice: globalMinPrice,
-                    // maxPrice: globalMaxPrice,
-                    // mainCategory: globalMainCategory,
-                    // subCategory: globalSubCategory,
                     minPrice: $('#minPrice').val(),
                     maxPrice: $('#maxPrice').val(),
                     mainCategory: $('#main-category').val(),
                     subCategory: $('#sub-category').val(),
                     page: startPage,
-                    size: 90
+                    size: 20
                 },
                 success: function (response) {
+                    console.log(response)
                     $('#product-list').empty();
                     $.each(response.content, (i, post) => {
                         let temp_html = `<tr>
-                                    <td>${i}</td>
+                                    <td>${i + 1}</td>
                                     <td>${post.productName}</td>
                                     <td>${post.price}</td>
                                 </tr>`;
@@ -241,7 +207,7 @@
             switch (mainCategory) {
                 case "상의":
                     subCategories = ["니트/스웨터", "피케/카라 티셔츠", "후드 티셔츠", "반소매 티셔츠", "맨투맨/스웨트셔츠",
-                        "민소매 티셔츠", "긴소매 티셔츠", "스포스 상의", "셔츠/블라우스", "기타 상의"]
+                        "민소매 티셔츠", "긴소매 티셔츠", "스포츠 상의", "셔츠/블라우스", "기타 상의"]
                     break;
                 case "아우터":
                     subCategories = ["후드 집업", "환절기 코트", "블루종/MA-1", "겨울 싱글 코트", "레더/라이더스 재킷",
@@ -342,7 +308,7 @@
         <br>
         <h3>카테고리 필터</h3>
         <p>
-            필터 조건이 없을 경우, 전날 판매 실적 기준 상위 90개의 상품이 노출됩니다
+            필터 조건이 없을 경우, 전날 판매 실적 기준 상위 20개의 상품이 노출됩니다
         </p>
         <div class="order-info">
             <div class="input-group mb-3">

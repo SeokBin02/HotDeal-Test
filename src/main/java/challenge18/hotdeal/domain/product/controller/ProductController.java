@@ -28,14 +28,14 @@ public class ProductController {
     @GetMapping("")
 
     public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition
-                                                  ,@PageableDefault Pageable pageable
+                                                  ,@PageableDefault(size = 20) Pageable pageable
     ) {
         System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
         System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
         System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
         System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
+        System.out.println("condition.getKeyword() = " + condition.getKeyword());
         return productService.allProduct(condition, pageable);
-//        return productService.allProduct(condition);
     }
 
     // 상품 상세 조회

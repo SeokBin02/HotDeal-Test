@@ -42,6 +42,9 @@ public class WebSecurityConfig {
                 .antMatchers(HttpMethod.GET,"/products**").permitAll()
                 .antMatchers(HttpMethod.GET,"/products/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/limited-products").permitAll()
+                .antMatchers(HttpMethod.GET, "/css/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/js/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/webfonts/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
