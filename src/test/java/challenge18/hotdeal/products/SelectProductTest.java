@@ -47,12 +47,11 @@ public class SelectProductTest {
         long productId = 5555;
 
         // when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> productService.selectProduct(productId));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> productService.checkExistProduct(productId));
 
         // then
         assertEquals("상품이 존재하지 않습니다.", exception.getMessage());
     }
-
 
     private void init() {
         Random rand = new Random(System.currentTimeMillis());

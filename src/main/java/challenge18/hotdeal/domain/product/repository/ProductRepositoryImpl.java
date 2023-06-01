@@ -40,8 +40,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .from(product)
                 .where(
                         searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
-//                        goeMinPrice(condition.getMinPrice()),
-//                        loeMaxPrice(condition.getMaxPrice()),
+                        goeMinPrice(condition.getMinPrice()),
+                        loeMaxPrice(condition.getMaxPrice()),
                         eqMainCategory(URLDecoder.decode(condition.getMainCategory())),
                         eqSubCategory(URLDecoder.decode(condition.getSubCategory()))
                 )

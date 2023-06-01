@@ -45,8 +45,7 @@ public class ProductService {
 
     //상품 상세 조회
     public SelectProductResponseDto selectProduct(Long productId){
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+        Product product = checkExistProduct(productId);
         return new SelectProductResponseDto(product);
     }
 
@@ -57,8 +56,7 @@ public class ProductService {
             return new ResponseEntity<>(new Message("로그인이 필요합니다."), HttpStatus.BAD_REQUEST);
         }
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+        Product product = checkExistProduct(productId);
 
         if (product.getAmount() <= 0) {
             throw new IllegalArgumentException("상품 재고가 없습니다.");
@@ -119,5 +117,10 @@ public class ProductService {
             }
         }
         return fixedCondition;
+    }
+
+    public Product checkExistProduct(Long productId){
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
     }
 }

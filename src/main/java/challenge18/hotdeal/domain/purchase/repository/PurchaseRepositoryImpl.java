@@ -43,7 +43,6 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
                 .limit(90)
                 .fetch();
 
-
         return new PageImpl<>(content, pageable, 90);
 //        return content;
     }
