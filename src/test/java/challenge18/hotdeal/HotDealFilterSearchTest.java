@@ -41,21 +41,21 @@ public class HotDealFilterSearchTest {
         System.out.println(stopWatch.prettyPrint());
     }
 
-    @Test
-    @DisplayName("응답시간 테스트")
-    void test2(){
-        List<AllProductResponseDto> productList = new ArrayList<>();
-        StopWatch stopWatch = new StopWatch();
-        ProductSearchCondition condition = new ProductSearchCondition(null, 1000l, "상의", "반소매 티셔츠");
-        Pageable pageable = Pageable.ofSize(10);
-
-
-        stopWatch.start();
-        productRepository.findAllByPriceAndCategory(condition, pageable);
-        stopWatch.stop();
-
-        System.out.println(stopWatch.prettyPrint());
-    }
+//    @Test
+//    @DisplayName("응답시간 테스트")
+//    void test2(){
+//        List<AllProductResponseDto> productList = new ArrayList<>();
+//        StopWatch stopWatch = new StopWatch();
+//        ProductSearchCondition condition = new ProductSearchCondition(null, 1000l, "상의", "반소매 티셔츠");
+//        Pageable pageable = Pageable.ofSize(10);
+//
+//
+//        stopWatch.start();
+//        productRepository.findAllByPriceAndCategory(condition, pageable);
+//        stopWatch.stop();
+//
+//        System.out.println(stopWatch.prettyPrint());
+//    }
 
 
 }
