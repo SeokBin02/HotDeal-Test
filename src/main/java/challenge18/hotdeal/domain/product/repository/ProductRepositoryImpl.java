@@ -34,33 +34,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
     public Page<AllProductResponseDto> findAllByPriceAndCategory(ProductSearchCondition condition, Pageable pageable) {
-        System.out.println("리포지토리 임플리멘테이션");
-        System.out.println("condition.getKeyword() = " + condition.getKeyword());
-
-        /* subQuery 사용하지 않을 경우
-        SELECT product_name, price FROM products
-        WHERE price_category = 1
-        AND categorya = '상의'
-        AND categoryb = '반소매 티셔츠'
-        AND price >= 10000
-        AND price <= 11000
-        AND MATCH(product_name) against('여성' in boolean mode);
-         */
 //        List<AllProductResponseDto> content = getContent(condition, pageable);
 //        Long total = getTotal(condition);
 
-        /* subQuery 사용할 경우
-        SELECT product_name, price FROM products
-        WHERE product_id IN (
-            SELECT product_id FROM products
-            WHERE price_category = 1
-            AND categorya = '상의'
-            AND categoryb = '반소매 티셔츠'
-        )
-        AND MATCH(product_name) against('여성' in boolean mode);
-        AND price >= 10000
-        AND price <= 11000
-         */
         List<AllProductResponseDto> content = getContent1(condition, pageable);
         Long total = getTotal1(condition);
 
@@ -105,6 +81,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private List<AllProductResponseDto> getContent(ProductSearchCondition condition, Pageable pageable) {
+        /* subQuery 사용하지 않을 경우
+        SELECT product_name, price FROM products
+        WHERE price_category = 1
+        AND categorya = '상의'
+        AND categoryb = '반소매 티셔츠'
+        AND price >= 10000
+        AND price <= 11000
+        AND MATCH(product_name) against('여성' in boolean mode);
+         */
         return queryFactory
                 .select(Projections.constructor(AllProductResponseDto.class,
                         product.productName,
@@ -139,6 +124,18 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private List<AllProductResponseDto> getContent1(ProductSearchCondition condition, Pageable pageable) {
+        /* subQuery 사용할 경우
+        SELECT product_name, price FROM products
+        WHERE product_id IN (
+            SELECT product_id FROM products
+            WHERE price_category = 1
+            AND categorya = '상의'
+            AND categoryb = '반소매 티셔츠'
+        )
+        AND MATCH(product_name) against('여성' in boolean mode);
+        AND price >= 10000
+        AND price <= 11000
+         */
         return queryFactory
                 .select(Projections.constructor(AllProductResponseDto.class,
                         product.productName,

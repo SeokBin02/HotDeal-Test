@@ -268,7 +268,6 @@ $(document).ready(function () {
 });
 
 function getData(startPage) {
-	console.log($('#keyword').val());
 	$.ajax({
 		url: '/products',
 		method: 'GET',
@@ -402,7 +401,6 @@ $(document).on("click", "ul.pagination li a", function () {
 });
 
 function set_product() {
-	//let temp_html = '';
 	$('#product-list').empty();
 	for (var i = 1; i <= 20; i++) {
 		let temp_html = `
@@ -418,26 +416,25 @@ function set_product() {
 function set_main_category() {
 	$('#menu').empty();
 	let mainCategories = ["상의", "아우터", "바지", "원피스",
-                "스커트", "스니커즈", "신발", "가방", "여성가방",
+                "스커트", "스니커즈", "신발", "가방", "여성 가방",
                 "스포츠/용품", "모자", "양말/레그웨어", "속옷", "선글라스/안경테",
                 "액세서리", "시계", "주얼리", "뷰티", "디지털/테크",
                 "리빙", "컬처", "반려동물"];
 
 	mainCategories.forEach((mainCategory) => {
-		let temp_html = `<option value=${mainCategory}>${mainCategory}</option>`
+		let temp_html = `<option value=${mainCategory.replace(" ", "&nbsp")}>${mainCategory}</option>`;
 		$('#main-category').append(temp_html)
 	});
 };
 
 function set_sub_category(mainCategory) {
-	console.log("무엇을 받았니?")
-	console.log(mainCategory);
+	let removeBlank = mainCategory.replace(/\s/gi,"");
+
 	$('#sub-category').empty();
 	$('#sub-category').append(`<option value = "" selected>전체 선택</option>`)
 	let subCategories = [];
-	switch (mainCategory) {
+	switch (removeBlank) {
 		case "상의":
-			console.log("상의에 들어왔다!!!!!!!")
 			subCategories = ["니트/스웨터", "피케/카라 티셔츠", "후드 티셔츠", "반소매 티셔츠", "맨투맨/스웨트셔츠",
 				"민소매 티셔츠", "긴소매 티셔츠", "스포츠 상의", "셔츠/블라우스", "기타 상의"]
 			break;
@@ -472,7 +469,6 @@ function set_sub_category(mainCategory) {
 				"가방 소품", "지갑/머니클립", "클러치 백"]
 			break;
 		case "여성가방":
-			console.log("여성 가방이다!!!!!!!!!");
 			subCategories = ["크로스백", "토트백", "숄더백", "클러치 백", "파우치 백",
 				"백팩", "웨이스트 백", "지갑/머니클립", "가방 소품"]
 			break;
