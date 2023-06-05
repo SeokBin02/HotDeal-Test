@@ -28,22 +28,19 @@ public class ProductService {
     private final PurchaseRepository purchaseRepository;
 
     // 상품 전체 조회 (필터링)
-
-    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
-                                                  , Pageable pageable
-    ) {
+    public AllProductResponseDto allProduct(ProductSearchCondition condition) {
         condition.setCondition(validateInput(condition));
         System.out.println("조건 수정 후");
         System.out.println("condition.getKeyword() = " + condition.getKeyword());
 
         // 조건이 없을 경우 전날 판매 실적 기준 Top90위
         if (checkConditionNull(condition)) {
-            return purchaseRepository.findTopN(pageable);
+            return purchaseRepository.findTopN(condition.getQueryLimit());
 //            return purchaseRepository.findTop90();
         }
 
         // 조건 필터링
-        return productRepository.findAllByPriceAndCategory(condition, pageable);
+        return productRepository.findAllByPriceAndCategory(condition);
 //        return productRepository.findAllByPriceAndCategory(condition);
     }
 
