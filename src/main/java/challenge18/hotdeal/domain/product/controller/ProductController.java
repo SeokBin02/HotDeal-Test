@@ -27,13 +27,13 @@ public class ProductController {
     // 상품 목록 조회
     @GetMapping("")
 
-    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition
+    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
                                                   ,@PageableDefault(size = 20) Pageable pageable
     ) {
-        System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
-        System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
-        System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
-        System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
+//        System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
+//        System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
+//        System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
+//        System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
         System.out.println("condition.getKeyword() = " + condition.getKeyword());
         return productService.allProduct(condition, pageable);
     }

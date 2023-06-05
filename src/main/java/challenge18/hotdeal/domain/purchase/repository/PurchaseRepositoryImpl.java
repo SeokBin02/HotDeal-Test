@@ -22,7 +22,7 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
 
     @Override
 
-    public Page<AllProductResponseDto> findTopN(
+    public Page<AllProductResponseDto> findTop90(
             Pageable pageable
     ) {
         System.out.println("pageable.getOffset() = "
@@ -37,11 +37,13 @@ public class PurchaseRepositoryImpl implements PurchaseRespositoryCustom {
                 .where(purchase.product.isNotNull())
                 .groupBy(purchase.product)
                 .orderBy(purchase.amount.sum().desc())
-                .offset(pageable.getOffset()) // 페이지 번호
-                .limit(pageable.getPageSize())
+                .offset(
+                        pageable.getOffset()
+                ) // 페이지 번호
+                .limit(90)
                 .fetch();
 
-        return new PageImpl<>(content, pageable, pageable.getPageSize());
+        return new PageImpl<>(content, pageable, 90);
 //        return content;
     }
 

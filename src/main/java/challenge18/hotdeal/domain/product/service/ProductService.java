@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,8 +29,8 @@ public class ProductService {
 
     // 상품 전체 조회 (필터링)
 
-    public Page<AllProductResponseDto> allProduct(ProductSearchCondition condition
-                                                  ,Pageable pageable
+    public List<AllProductResponseDto> allProduct(ProductSearchCondition condition
+                                                  , Pageable pageable
     ) {
         condition.setCondition(validateInput(condition));
         System.out.println("조건 수정 후");
