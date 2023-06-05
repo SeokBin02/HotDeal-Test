@@ -60,7 +60,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .fetch();
 
         if(CollectionUtils.isEmpty(content_id)){
-            return new PageImpl(content, pageable, content.size());
+//            return new PageImpl(content, pageable, content.size());
+            return null;
         }
 
         content =  queryFactory

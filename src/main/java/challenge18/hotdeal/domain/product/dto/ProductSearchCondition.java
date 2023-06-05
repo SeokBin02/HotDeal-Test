@@ -24,6 +24,7 @@ public class ProductSearchCondition {
         this.keyword = keyword;
         this.queryOffset = queryOffset;
         this.queryLimit = queryLimit;
+
     }
 
     public void setCondition(ProductSearchCondition condition){

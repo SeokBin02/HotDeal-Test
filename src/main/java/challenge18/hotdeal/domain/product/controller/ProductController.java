@@ -26,7 +26,6 @@ public class ProductController {
 
     // 상품 목록 조회
     @GetMapping("")
-
     public AllProductResponseDto allProduct(ProductSearchCondition condition) {
         System.out.println("condition.getMinPrice() = " + condition.getMinPrice());
         System.out.println("condition.getMaxPrice() = " + condition.getMaxPrice());
@@ -36,6 +35,7 @@ public class ProductController {
         System.out.println("condition.getQueryOffset() = " + condition.getQueryOffset());
         System.out.println("condition.getQueryLimit() = " + condition.getQueryLimit());
         return productService.allProduct(condition);
+
     }
 
     // 상품 상세 조회
