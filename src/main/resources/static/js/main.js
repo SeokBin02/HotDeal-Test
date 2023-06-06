@@ -277,7 +277,7 @@ function initIndexList() {
 }
 
 function getData(pageNumber) {
-	console.log(indexList);
+	//console.log(indexList);
 	nowPage = pageNumber;
 	$.ajax({
 		url: '/products',
@@ -292,7 +292,7 @@ function getData(pageNumber) {
 			queryLimit: pageSize
 		},
 		success: function (response) {
-			console.log(response)
+			//console.log(response)
 			$('#product-list').empty();
 			$.each(response.content, (i, post) => {
 				let temp_html = `<tr>
@@ -339,7 +339,7 @@ function createPageList(next) {
 	// 페이지 링크 반환
 	var pagingLink = '';
 	pagingLink = prevButton + nextButton;
-	console.log(pagingLink);
+	//console.log(pagingLink);
 	$("ul.pagination").append(pagingLink);
 }
 
