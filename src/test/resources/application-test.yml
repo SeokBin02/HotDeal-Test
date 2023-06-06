@@ -20,5 +20,5 @@ spring:
         password:
   data:
     redis:
-      host: localhost
+      host: redis-test-001.3lrrfy.0001.apn2.cache.amazonaws.com
       port: 6379
