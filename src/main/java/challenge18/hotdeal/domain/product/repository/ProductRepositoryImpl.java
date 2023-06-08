@@ -3,23 +3,29 @@ package challenge18.hotdeal.domain.product.repository;
 import challenge18.hotdeal.domain.product.dto.AllProductResponseDto;
 import challenge18.hotdeal.domain.product.dto.ProductSearchCondition;
 import challenge18.hotdeal.domain.product.dto.SelectProductResponseDto;
+import challenge18.hotdeal.domain.product.entity.QProduct;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static challenge18.hotdeal.domain.product.entity.QProduct.product;
+import static java.lang.Long.valueOf;
 
 @Repository
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    QProduct subProduct = new QProduct("subProduct");
 
     @Override
     public AllProductResponseDto findAllByPriceAndCategory(ProductSearchCondition condition) {
@@ -38,6 +44,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         goeProductId(condition.getQueryIndex()),
                         eqMainCategory(condition.getMainCategory()),
                         eqSubCategory(condition.getSubCategory()),
+                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
                         goeMinPrice(condition.getMinPrice()),
                         loeMaxPrice(condition.getMaxPrice()),
                         matchKeyword(condition.getKeyword())
