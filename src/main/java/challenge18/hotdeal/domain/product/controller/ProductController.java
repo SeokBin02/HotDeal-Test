@@ -9,6 +9,7 @@ import challenge18.hotdeal.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ProductController {
         System.out.println("condition.getMainCategory() = " + condition.getMainCategory());
         System.out.println("condition.getSubCategory() = " + condition.getSubCategory());
         System.out.println("condition.getKeyword() = " + condition.getKeyword());
-        System.out.println("condition.getQueryOffset() = " + condition.getQueryIndex());
+        System.out.println("condition.getQueryIndex() = " + condition.getQueryIndex());
         System.out.println("condition.getQueryLimit() = " + condition.getQueryLimit());
         return productService.allProduct(condition);
 
