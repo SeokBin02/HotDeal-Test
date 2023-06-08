@@ -33,7 +33,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private AllProductResponseDto getContent(ProductSearchCondition condition) {
-        System.out.println("getContent에 들어왔다!");
         List<SelectProductResponseDto> content = queryFactory
                 .select(Projections.constructor(SelectProductResponseDto.class,
                         product.id,
@@ -44,7 +43,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         goeProductId(condition.getQueryIndex()),
                         eqMainCategory(condition.getMainCategory()),
                         eqSubCategory(condition.getSubCategory()),
-                        searchPriceCategory(condition.getMinPrice(), condition.getMaxPrice()),
                         goeMinPrice(condition.getMinPrice()),
                         loeMaxPrice(condition.getMaxPrice()),
                         matchKeyword(condition.getKeyword())
@@ -52,7 +50,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .orderBy(product.id.asc())
                 .limit(condition.getQueryLimit() + 1) // 페이지 사이즈
                 .fetch();
-        System.out.println(content);
         boolean next; // 다음 페이지 유(true)/무(false)
 
         // 다음 페이지가 있으면
