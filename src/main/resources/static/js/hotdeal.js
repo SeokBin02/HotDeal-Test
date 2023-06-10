@@ -6,7 +6,7 @@ var token = '';
 let customAlert = new CustomAlert();
 
 $(document).ready(function () {
-	// getData(0); // TopN
+	getData(0); // TopN
 	set_main_category();
 	set_sign_button();
 
@@ -83,6 +83,7 @@ function getData(pageNumber) {
 			createPageList(response['next']);
 		},
 		error: function (e) {
+			console.log(e);
 			alert("ERROR: ", e);
 			console.log("ERROR: ", e);
 		},
